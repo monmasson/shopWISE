@@ -33,10 +33,6 @@ Gender :{ type: string}*/
 
  });
 
-    
+ const Product = mongoose.model('Product', productSchema);
 
-// convert schema to model
-const productModel = mongoose.model("Products", productSchema)
-
-// export 
-module.exports = productModel
+module.exports = Product;

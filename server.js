@@ -7,9 +7,16 @@ const dotenv = require("dotenv");
 dotenv.config();
 const mongoConfig = require("./config");
 require("dotenv").config()
+const bodyParser = require("body-parser")
+
+//IMPORTING AND CALLING PRODUCT ROUTE
+const productRoute = express.Router()
+server.use('/product', productRoute);
 
 
-
+//IMPORTING AND CALLING USER ROUTE
+const userRoute = express.Router()
+server.use('/user', userRoute);
 
 
 server.use(morgan("dev"))
