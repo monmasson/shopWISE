@@ -20,7 +20,7 @@ Gender :{ type: string}*/
        conditionsUsed: {type:String},
        availability: { type: Boolean, required: true, default: true },
        noinStock :{type:Number},
-       size:{type:Number, required:true },
+       size:{type:String, required:true },
        gender:{type:String},
        pricing:{ type: Number, required: true, min: 0 },
 
@@ -33,6 +33,6 @@ Gender :{ type: string}*/
 
  });
 
- const Product = mongoose.model('Product', productSchema);
+ const Product = mongoose.model('product', productSchema);
 
 module.exports = Product;
