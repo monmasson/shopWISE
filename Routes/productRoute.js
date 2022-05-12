@@ -10,7 +10,8 @@ const Product = require('../Model/productSchema');
 const User = require('../Model/userSchema');
 
 
-// INDEX ROUTE (get all the list of products)
+
+//////////// INDEX ROUTE (get all the list of products) //SUCCESS //WORKS!!!!/////////////////////////
 
 productRoute.get("/", (req, res) => {
   Product.find({}, (error, allProducts) => {
@@ -28,9 +29,10 @@ productRoute.get("/", (req, res) => {
     }
   });
 });
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// ROUTE TO DELETE A PRODUCT
+////////////// ROUTE TO DELETE A PRODUCT // SUCESS ///WORKS!!!!! ///////////////////////////////////////
 
 productRoute.delete('/:id', (req, res) => {
   Product.deleteOne({ // delete a product
@@ -43,72 +45,16 @@ productRoute.delete('/:id', (req, res) => {
       res.status(404).json({
         error: 'No User found to delete with that id'
       })
+
     } else {
-      res.status(204).json({}); // sends back 204 to indicate that the product was removed!
+      res.status(204).json({}); // sends back 204 on terminal to indicate that the product was removed!
     }
   })
 });
-
-productRoute.delete('/:id', (req, res) => {
-  Product.deleteOne({ // delete a product
-    _id: req.params.productId // with the id specified in the request
-  }, (error, deletedProduct) => {
-
-    if (error) {
-      console.error(error)
-
-      res.status(404).json({
-        error: 'No Product found to delete with that id'
-      })
-
-    } else {
-      /*User.updateOne({ // updates the user
-        _id: req.params.userId // with the id specified in the request
-      }, {
-        $pull: {
-          bought_products: req.params.productId // removes the product with the id in the request from the sold_products array
-        }
-      }, (error, updatedUser) => {
-        
-        
-        if (error) {
-          res.status(404).json({
-            error: 'No user found with that id'
-          })
- 
-        } else {*/
-      res.status(204).json({}); // sends back 204 to indicate that the product was removed!
-    }
-  })
-})
-// })
-//})
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
-// ROUTE TO UPDATE A PRODUCT    //SUCCESS WORKS!!!!
-productRoute.put("/:id", (req, res) => {
-  const id = req.params.id
-  const updatedProduct = req.body
-
-  Product.updateOne({ _id: id }, updatedProduct, { new: true }, (err, updatedProduct) => {
-    if (err) {
-      res.status(404).json({ message: err.message })
-    } else {
-      res.status(202).json(updatedProduct)
-    }
-  })
-})
-
-
-
-
-
-
-
-//ROUTE TO CREATE A PRODUCT 
+//////ROUTE TO CREATE A PRODUCT  // SUCCESS WORKS!!!!    =>>> NEED TO ADD EXTRA FEATURES AND TEST///////
 productRoute.post('/', (req, res) => {
   const productData = req.body
   Product.create(productData, (error, createdProduct) => {
@@ -118,36 +64,38 @@ productRoute.post('/', (req, res) => {
       res.status(400).json({
         error: 'an error has occurred creating the product'
       })
-
-
-
     } else {
-
-      /*User.updateOne({ // updates the user that bought the product 
-             _id: productData.seller // id of the seller from the product info
-         }, {
-             $push: {
-                 bought_products: createdProduct._id // pushes the created product's id into the buyer's bought_products array
-             }
-         }, (error, updatedUser) => {
-             if (error) {
-             
-                 res.status(400).json({
-                     error: 'an error has occurred updating the user'
-                 })
-
-             } else { */ // This would be the original route if not updating the user.
+      //console.log('created product successfully');
       res.status(201).json({
-        message: "successfully created product",
-        product: createdProduct
+        message: 'Created Successfully',
+        user: createdProduct
       })
     }
   })
-
 })
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//ROUTE TO SHOW A PRODUCT (with specific id) /// SUCCESS /// WORKS!!!!
+/////////////// ROUTE TO UPDATE PRODUCT WITH SPECIFIC ID. //////////////////////////////////////
+productRoute.put("/:id", (req, res)=>{
+  const id = req.params.id
+  const updatedProduct = req.body
+
+  Product.updateOne({_id:id}, updatedProduct, {new: true},(err, updatedProduct)=>{
+      if(err){
+          console.error(error)
+          res.status(404).json({message: err.message})
+      } else {
+          res.status(202).json(updatedProduct)
+      }
+  })
+})
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+////////////ROUTE TO SHOW A PRODUCT (with specific id) /// SUCCESS /// WORKS!!!!///////////////
 productRoute.get("/show/:id", (req, res) => {
   const id = req.params.id
   Product.find({ _id: id }, (error, foundProduct) => {
@@ -162,6 +110,7 @@ productRoute.get("/show/:id", (req, res) => {
     };
   });
 });
-
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = productRoute;
+

@@ -7,9 +7,10 @@ const express = require('express');
 const userRoute = express.Router();
 const User = require('../Model/userSchema');
 const Product = require('../Model/productSchema');
+const Extra = require('../Model/extraSchema');
 
 
-//ROUTE FOR INDEX (SHOWS THE LIST OF ALL USERS)  /// SUCCESS//// WORKS!
+////////ROUTE FOR INDEX (SHOWS THE LIST OF ALL USERS)  /// SUCCESS//// WORKS!/////////////////////////
 userRoute.get("/", (req, res) => {
     User.find({},(error,allUsers)=>{
         if (error){
@@ -25,8 +26,11 @@ userRoute.get("/", (req, res) => {
         }
     });
 });
+//////////////////////////////////////////////////////////////////////////////////////////////
 
-// DELETE ROUTE FOR USER
+
+
+////////////// DELETE ROUTE FOR USER WITH THAT ID // SUCCESS//WORKS//////////////////////////////
 userRoute.delete('/:id', (req, res) => {
     User.deleteOne({ // delete a product
       _id: req.params.userId // with the id specified in the request
@@ -43,10 +47,11 @@ userRoute.delete('/:id', (req, res) => {
     }
   })
 });
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-//ROUTE TO UPDATE A USER  // SUCCESS /// WORKS!!!!!!!
+////////////ROUTE TO UPDATE A USER WITH THAT ID // SUCCESS /// WORKS!!!!!!!////////////////////////////
   userRoute.put("/:id", (req, res)=>{
     const id = req.params.id
     const updatedUser = req.body
@@ -60,8 +65,10 @@ userRoute.delete('/:id', (req, res) => {
         }
     })
 })
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// ROUTE TO CREATE A USER  /// SUCCESS WORKS!!!!
+
+////////////// ROUTE TO CREATE A USER  /// SUCCESS WORKS!!!!////////////////////////////////////////
 
 userRoute.post('/', (req, res) => {
    // console.log(req.body)//troubleshooting
@@ -81,9 +88,10 @@ userRoute.post('/', (req, res) => {
       }
     })
   })
+  /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-  //ROUTE TO SHOW A USER (with specific id) /// SUCCESS /// WORKS!!!!
+  ///////ROUTE TO SHOW A USER (with specific id) /// SUCCESS /// WORKS!!!!/////////////////////////
   userRoute.get("/show/:id", (req, res) => {
     const id = req.params.id
     User.find({_id:id} ,(error, foundUser)=>{
@@ -98,6 +106,39 @@ userRoute.post('/', (req, res) => {
            };
     });
 });
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////ROUTE FOR EXTRA FEATURES ADD PRODUCT TO USER'S PURCHASE HISTORY///////////////////////////////////////////////
+userRoute.put("/:productId/:userId", (req, res)=>{
+   
+    User.updateOne({ // updates the user that bought the product 
+             _id: req.params.userId // id of the buyer from the product info
+         }, {
+             $push: {
+                 bought_products: req.params.productId // pushes the created product's id into the buyer's bought_products array
+             }
+         }, (error, updatedUser) => {
+             if (error) {
+             
+                 res.status(400).json({
+                     error: 'an error has occurred updating the user'
+                 })
+                
+
+             } else { 
+      res.status(201).json({
+        message: "successfully added the product to user",
+        user: updatedUser
+        // make update route for product. 
+
+        
+        // update the number of products in stock. 
+      })
+    }
+  })
+});
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
