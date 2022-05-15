@@ -5,6 +5,7 @@
 // CONSTANTS //
 ///////////////
 const express = require('express');
+const res = require('express/lib/response');
 const productRoute = express.Router();
 const Product = require('../Model/productSchema');
 const User = require('../Model/userSchema');
@@ -111,6 +112,42 @@ productRoute.get("/show/:id", (req, res) => {
   });
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////EXTRA: ROUTE TO CHECK THE INVENTORY//////////////////////////
+
+///The $inc operator increments a field by a specified value and has the following form:
+
+//{ $inc: { <field1>: <amount1>, <field2>: <amount2>, ... } }
+//To specify a <field> in an embedded document or in an array, use dot notation.
+
+productRoute.put("/stock/:productID", (req,res) =>{
+  const id = req.params.productID
+  const updatedProduct = req.body
+  Product.updateOne({_id:id},{ $inc: { noinStock: -1 } }, {new: true},(error, updatedProduct)=>{
+    if (error) {
+        console.error(error);
+        res.status(400).json({ 
+          error: 'Not in stock'
+        })
+    } else {
+     console.log('successfully upadted the  product inventory ');
+        res.status(201).json({
+          message: "successfully updated the product inventory",
+          product: updatedProduct ,
+        })
+     } 
+    })
+    })
+  
+     
+
+
+
+
+
+
 
 module.exports = productRoute;
 

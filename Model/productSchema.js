@@ -10,7 +10,7 @@ const { Schema } = require("mongoose"); //("../Model/extraSchema");
        instructions :{type:String, required:true },
        conditionsUsed: {type:String},
        availability: { type: Boolean, required: true, default: true },
-       noinStock :{type:Number},// $inc look up for a route. 
+       noinStock :{type:Number},// $inc look up for a route. update 
        size:{type:String, required:true },
        gender:{type:String},
        pricing:{ type: Number, required: true, min: 0 },
